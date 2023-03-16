@@ -3,6 +3,7 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 
 import LoginScreen from "./screens/Authentication/LoginScreen";
+import RegisterScreen from "./screens/Authentication/RegisterScreen";
 import OnboardingScreen from "./screens/OnboardingScreen";
 
 const Stack = createNativeStackNavigator();
@@ -15,12 +16,12 @@ function App() {
           initialRouteName="Home"
           screenOptions={{
             headerTitleAlign: "center",
-            headerTintColor: "yellow",
+            headerTintColor: "white",
             headerTitleStyle: {
               fontWeight: "400",
             },
             headerStyle: {
-              backgroundColor: "blue",
+              backgroundColor: "#512bd4",
             },
           }}
         >
@@ -29,7 +30,20 @@ function App() {
             component={OnboardingScreen}
             options={{ headerShown: false }}
           />
-          <Stack.Screen name="Details" component={LoginScreen} />
+          <Stack.Screen
+            name="Login"
+            component={LoginScreen}
+            options={{
+              headerTitleAlign: "left",
+            }}
+          />
+          <Stack.Screen
+            name="Register"
+            component={RegisterScreen}
+            options={{
+              headerTitleAlign: "left",
+            }}
+          />
         </Stack.Navigator>
       </NavigationContainer>
     </SafeAreaProvider>
