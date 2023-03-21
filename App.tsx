@@ -6,6 +6,7 @@ import { StatusBar } from "expo-status-bar";
 import LoginScreen from "./screens/Authentication/LoginScreen";
 import RegisterScreen from "./screens/Authentication/RegisterScreen";
 import OnboardingScreen from "./screens/OnboardingScreen";
+import ForgotPasswordScreen from "./screens/Authentication/ForgotPasswordScreen";
 
 const Stack = createNativeStackNavigator();
 
@@ -35,7 +36,6 @@ function App() {
             name="Login"
             component={LoginScreen}
             options={{
-              headerTitleAlign: "left",
               headerTitle: "",
             }}
           />
@@ -43,7 +43,14 @@ function App() {
             name="Register"
             component={RegisterScreen}
             options={{
-              headerTitleAlign: "left",
+              headerTitle: "",
+            }}
+          />
+          <Stack.Screen
+            name="ForgotPassword"
+            component={ForgotPasswordScreen}
+            options={{
+              headerTitle: "",
             }}
           />
         </Stack.Navigator>

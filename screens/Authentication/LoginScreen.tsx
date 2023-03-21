@@ -1,7 +1,6 @@
 import { useState } from "react";
 import {
   Alert,
-  Image,
   StyleSheet,
   Text,
   TextInput,
@@ -10,9 +9,10 @@ import {
 } from "react-native";
 
 import Heading from "../../components/Heading";
+import GoogleIcon from "../../components/Icons/GoogleIcon";
 import Spacer from "../../components/Spacer";
 
-export default function LoginScreen() {
+export default function LoginScreen({ navigation }: any) {
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
 
@@ -29,15 +29,9 @@ export default function LoginScreen() {
       { text: "OK", onPress: () => console.log("OK Pressed") },
     ]);
 
-  const handleForgotPassword = () =>
-    Alert.alert("Forgot password", "navigate to forgot password screen", [
-      {
-        text: "Cancel",
-        onPress: () => console.log("Cancel Pressed"),
-        style: "cancel",
-      },
-      { text: "OK", onPress: () => console.log("OK Pressed") },
-    ]);
+  const handleForgotPassword = () => {
+    navigation.navigate("ForgotPassword");
+  };
 
   return (
     <View style={styles.container}>
@@ -97,15 +91,21 @@ export default function LoginScreen() {
       <Spacer height={16} />
 
       <TouchableOpacity
-        style={[styles.buttonImage, { backgroundColor: "#2277ee" }]}
+        style={[
+          styles.button,
+          {
+            backgroundColor: "#131D38",
+            flexDirection: "row",
+            borderColor: "#687087",
+            borderWidth: 1,
+          },
+        ]}
       >
-        <Image
-          style={styles.tinyLogo}
-          source={{
-            uri: "https://reactnative.dev/img/tiny_logo.png",
-          }}
-        />
-        <Text style={styles.buttonText}>Login with Google</Text>
+        <GoogleIcon height={24} width={24} />
+        <Spacer width={8} />
+        <Text style={{ color: "#A4B7F9", fontWeight: "400" }}>
+          Login with Google
+        </Text>
       </TouchableOpacity>
     </View>
   );
@@ -126,10 +126,6 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     height: 46,
-  },
-  buttonText: {
-    marginLeft: 20,
-    fontWeight: "bold",
   },
   container: {
     backgroundColor: "#000C26",
