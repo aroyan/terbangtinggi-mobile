@@ -1,6 +1,7 @@
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { SafeAreaProvider } from "react-native-safe-area-context";
+import { StatusBar } from "expo-status-bar";
 
 import LoginScreen from "./screens/Authentication/LoginScreen";
 import RegisterScreen from "./screens/Authentication/RegisterScreen";
@@ -21,7 +22,7 @@ function App() {
               fontWeight: "400",
             },
             headerStyle: {
-              backgroundColor: "#512bd4",
+              backgroundColor: "#131D38",
             },
           }}
         >
@@ -35,6 +36,7 @@ function App() {
             component={LoginScreen}
             options={{
               headerTitleAlign: "left",
+              headerTitle: "",
             }}
           />
           <Stack.Screen
@@ -46,6 +48,7 @@ function App() {
           />
         </Stack.Navigator>
       </NavigationContainer>
+      <StatusBar style="light" />
     </SafeAreaProvider>
   );
 }
