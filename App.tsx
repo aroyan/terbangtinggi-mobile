@@ -6,10 +6,17 @@ import { StatusBar } from "expo-status-bar";
 import LoginScreen from "./screens/Authentication/LoginScreen";
 import RegisterScreen from "./screens/Authentication/RegisterScreen";
 import OnboardingScreen from "./screens/OnboardingScreen";
-import ForgotPasswordScreen from "./screens/Authentication/ForgotPasswordScreen";
 import Home from "./screens/Home";
 
-const Stack = createNativeStackNavigator();
+export type RootStackParamList = {
+  Onboarding: undefined;
+  Home: undefined;
+  Login: undefined;
+  Register: undefined;
+  ForgotPassword: undefined;
+};
+
+const Stack = createNativeStackNavigator<RootStackParamList>();
 
 function App() {
   // change this with AsyncStorage later
@@ -19,7 +26,7 @@ function App() {
     <SafeAreaProvider>
       <NavigationContainer>
         <Stack.Navigator
-          initialRouteName={isFirstTimeOpening ? "" : ""}
+          initialRouteName={isFirstTimeOpening ? "Onboarding" : "Home"}
           screenOptions={{
             headerTitleAlign: "center",
             headerTintColor: "white",
@@ -51,13 +58,6 @@ function App() {
           <Stack.Screen
             name="Register"
             component={RegisterScreen}
-            options={{
-              headerTitle: "",
-            }}
-          />
-          <Stack.Screen
-            name="ForgotPassword"
-            component={ForgotPasswordScreen}
             options={{
               headerTitle: "",
             }}

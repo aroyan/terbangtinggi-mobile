@@ -1,7 +1,13 @@
-import { StyleSheet, Text } from "react-native";
+import { ReactNode } from "react";
+import { StyleSheet, Text, StyleProp, TextStyle } from "react-native";
 
-export default function Heading(props: any) {
-  const { children, style, ...rest } = props;
+type Props = {
+  children: ReactNode;
+  style?: StyleProp<TextStyle>;
+  rest?: any;
+};
+
+export default function Heading({ children, style, ...rest }: Props) {
   return (
     <Text style={[styles.heading, style]} {...rest}>
       {children}

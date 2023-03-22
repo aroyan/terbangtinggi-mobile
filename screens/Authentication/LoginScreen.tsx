@@ -1,18 +1,22 @@
-import { useState } from "react";
-import {
-  Alert,
-  StyleSheet,
-  Text,
-  TextInput,
-  TouchableOpacity,
-  View,
-} from "react-native";
+import { useState, useLayoutEffect } from "react";
+import { Alert, StyleSheet, TextInput, TouchableOpacity } from "react-native";
+import { useNavigation } from "@react-navigation/native";
+import { NativeStackNavigationProp } from "@react-navigation/native-stack";
+import * as WebBrowser from "expo-web-browser";
+import { AntDesign } from "@expo/vector-icons";
 
+import { RootStackParamList } from "../../App";
+import { Link, Text } from "../../components/Themed";
 import Heading from "../../components/Heading";
 import GoogleIcon from "../../components/Icons/GoogleIcon";
 import Spacer from "../../components/Spacer";
+import AuthLayout from "./AuthLayout";
 
-export default function LoginScreen({ navigation }: any) {
+type LoginScreenProp = NativeStackNavigationProp<RootStackParamList, "Login">;
+
+export default function LoginScreen() {
+  const navigation = useNavigation<LoginScreenProp>();
+
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
 
@@ -29,19 +33,30 @@ export default function LoginScreen({ navigation }: any) {
       { text: "OK", onPress: () => console.log("OK Pressed") },
     ]);
 
-  const handleForgotPassword = () => {
-    navigation.navigate("ForgotPassword");
-  };
+  useLayoutEffect(() => {
+    navigation.setOptions({
+      headerLeft: () => (
+        <AntDesign
+          name="close"
+          size={24}
+          color="white"
+          onPress={() => {
+            navigation.goBack();
+          }}
+        />
+      ),
+    });
+  }, [navigation]);
 
   return (
-    <View style={styles.container}>
+    <AuthLayout>
       <Spacer height={32} />
 
       <Heading style={{ color: "#e4e5e5" }}>Login</Heading>
 
       <Spacer height={24} />
 
-      <Text style={{ color: "white" }}>
+      <Text>
         Book your entire trip in one place, with free access to Member Prices
         and points
       </Text>
@@ -70,12 +85,17 @@ export default function LoginScreen({ navigation }: any) {
         value={password}
         onChangeText={handlePasswordChange}
       />
+
       <Spacer height={16} />
 
-      <TouchableOpacity>
-        <Text onPress={handleForgotPassword} style={styles.link}>
-          Forgot password?
-        </Text>
+      <TouchableOpacity
+        onPress={() =>
+          WebBrowser.openBrowserAsync(
+            "https://terbang-tinggi-client.vercel.app/auth/forgot-password"
+          )
+        }
+      >
+        <Link>Forgot password?</Link>
       </TouchableOpacity>
 
       <Spacer height={16} />
@@ -107,7 +127,7 @@ export default function LoginScreen({ navigation }: any) {
           Login with Google
         </Text>
       </TouchableOpacity>
-    </View>
+    </AuthLayout>
   );
 }
 
@@ -138,10 +158,5 @@ const styles = StyleSheet.create({
     padding: 8,
     color: "white",
     borderRadius: 8,
-  },
-  link: { color: "white", textDecorationLine: "underline" },
-  tinyLogo: {
-    width: 24,
-    height: 24,
   },
 });

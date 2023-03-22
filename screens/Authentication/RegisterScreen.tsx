@@ -1,18 +1,30 @@
-import { useState } from "react";
+import { useLayoutEffect, useState } from "react";
 import {
   Alert,
   StyleSheet,
-  Text,
   TextInput,
   TouchableOpacity,
   View,
 } from "react-native";
+import { useNavigation } from "@react-navigation/native";
+import { NativeStackNavigationProp } from "@react-navigation/native-stack";
+import { AntDesign } from "@expo/vector-icons";
 
+import { RootStackParamList } from "../../App";
+import { Link, Text } from "../../components/Themed";
 import Heading from "../../components/Heading";
 import GoogleIcon from "../../components/Icons/GoogleIcon";
 import Spacer from "../../components/Spacer";
+import AuthLayout from "./AuthLayout";
 
-export default function RegisterScreen({ navigation }: any) {
+type RegisterScreenProp = NativeStackNavigationProp<
+  RootStackParamList,
+  "Register"
+>;
+
+export default function RegisterScreen() {
+  const navigation = useNavigation<RegisterScreenProp>();
+
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [confirmPassword, setConfirmPassword] = useState<string>("");
@@ -34,15 +46,30 @@ export default function RegisterScreen({ navigation }: any) {
       { text: "OK", onPress: () => console.log("OK Pressed") },
     ]);
 
+  useLayoutEffect(() => {
+    navigation.setOptions({
+      headerLeft: () => (
+        <AntDesign
+          name="close"
+          size={24}
+          color="white"
+          onPress={() => {
+            navigation.goBack();
+          }}
+        />
+      ),
+    });
+  }, [navigation]);
+
   return (
-    <View style={styles.container}>
+    <AuthLayout>
       <Spacer height={32} />
 
       <Heading style={{ color: "#e4e5e5" }}>Register</Heading>
 
       <Spacer height={24} />
 
-      <Text style={{ color: "white" }}>
+      <Text>
         Book your entire trip in one place, with free access to Member Prices
         and points
       </Text>
@@ -100,14 +127,9 @@ export default function RegisterScreen({ navigation }: any) {
       <Spacer height={16} />
 
       <View style={{ flexDirection: "row" }}>
-        <Text style={{ color: "white" }}>Have an account? </Text>
+        <Text>Have an account? </Text>
         <TouchableOpacity>
-          <Text
-            onPress={() => navigation.navigate("Login")}
-            style={styles.link}
-          >
-            Login
-          </Text>
+          <Link onPress={() => navigation.replace("Login")}>Login</Link>
         </TouchableOpacity>
       </View>
 
@@ -140,7 +162,7 @@ export default function RegisterScreen({ navigation }: any) {
           Continue with Google
         </Text>
       </TouchableOpacity>
-    </View>
+    </AuthLayout>
   );
 }
 
@@ -160,21 +182,11 @@ const styles = StyleSheet.create({
     alignItems: "center",
     height: 46,
   },
-  container: {
-    backgroundColor: "#000C26",
-    height: "100%",
-    paddingHorizontal: 30,
-  },
   input: {
     borderColor: "#697488",
     borderWidth: 1,
     padding: 8,
     color: "white",
     borderRadius: 8,
-  },
-  link: { color: "white", textDecorationLine: "underline" },
-  tinyLogo: {
-    width: 24,
-    height: 24,
   },
 });
