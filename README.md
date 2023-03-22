@@ -1,3 +1,10 @@
 # Terbang Tinggi mobile app
 
-- Login, Register, Forgot password 
+## TODOs
+
+- [ ] Onboarding screen
+- [ ] Home screen
+- [ ] Login, Register, Forgot Password screens
+- [ ] User Profile screen
+- [ ] Search and Search Result screens
+- [ ] Notification screen

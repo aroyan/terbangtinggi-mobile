@@ -7,15 +7,19 @@ import LoginScreen from "./screens/Authentication/LoginScreen";
 import RegisterScreen from "./screens/Authentication/RegisterScreen";
 import OnboardingScreen from "./screens/OnboardingScreen";
 import ForgotPasswordScreen from "./screens/Authentication/ForgotPasswordScreen";
+import Home from "./screens/Home";
 
 const Stack = createNativeStackNavigator();
 
 function App() {
+  // change this with AsyncStorage later
+  const isFirstTimeOpening = true;
+
   return (
     <SafeAreaProvider>
       <NavigationContainer>
         <Stack.Navigator
-          initialRouteName="Home"
+          initialRouteName={isFirstTimeOpening ? "" : ""}
           screenOptions={{
             headerTitleAlign: "center",
             headerTintColor: "white",
@@ -28,8 +32,13 @@ function App() {
           }}
         >
           <Stack.Screen
-            name="Home"
+            name="Onboarding"
             component={OnboardingScreen}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="Home"
+            component={Home}
             options={{ headerShown: false }}
           />
           <Stack.Screen
