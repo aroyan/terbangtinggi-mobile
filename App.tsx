@@ -8,11 +8,11 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import LoginScreen from "./screens/Authentication/LoginScreen";
 import RegisterScreen from "./screens/Authentication/RegisterScreen";
 import OnboardingScreen from "./screens/OnboardingScreen";
-import Home from "./screens/Home";
+import HomeTabNavigator from "./screens/Home/HomeTabNavigator";
 
 export type RootStackParamList = {
   Onboarding: undefined;
-  Home: undefined;
+  HomeTabNavigator: undefined;
   Login: undefined;
   Register: undefined;
   ForgotPassword: undefined;
@@ -44,7 +44,9 @@ function App() {
     <SafeAreaProvider>
       <NavigationContainer>
         <Stack.Navigator
-          initialRouteName={isFirstTimeOpening ? "Onboarding" : "Home"}
+          initialRouteName={
+            isFirstTimeOpening ? "Onboarding" : "HomeTabNavigator"
+          }
           screenOptions={{
             headerTitleAlign: "center",
             headerTintColor: "white",
@@ -62,8 +64,8 @@ function App() {
             options={{ headerShown: false }}
           />
           <Stack.Screen
-            name="Home"
-            component={Home}
+            name="HomeTabNavigator"
+            component={HomeTabNavigator}
             options={{ headerShown: false }}
           />
           <Stack.Screen
