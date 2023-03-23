@@ -1,7 +1,9 @@
+import { useEffect, useState } from "react";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import { StatusBar } from "expo-status-bar";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 import LoginScreen from "./screens/Authentication/LoginScreen";
 import RegisterScreen from "./screens/Authentication/RegisterScreen";
@@ -19,8 +21,24 @@ export type RootStackParamList = {
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
 function App() {
-  // change this with AsyncStorage later
-  const isFirstTimeOpening = true;
+  const [isFirstTimeOpening, setIsFirstTimeOpening] = useState(true);
+
+  const getOnboardingStatus = async () => {
+    try {
+      const value = await AsyncStorage.getItem("isFirstTimeOpening");
+      const parsedValue = JSON.parse(value!);
+      if (value !== null) {
+        setIsFirstTimeOpening(true);
+      }
+      setIsFirstTimeOpening(parsedValue);
+    } catch (error) {
+      throw error;
+    }
+  };
+
+  useEffect(() => {
+    getOnboardingStatus();
+  }, []);
 
   return (
     <SafeAreaProvider>
