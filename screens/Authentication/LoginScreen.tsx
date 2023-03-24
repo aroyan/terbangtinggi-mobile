@@ -6,8 +6,7 @@ import * as WebBrowser from "expo-web-browser";
 import { AntDesign } from "@expo/vector-icons";
 
 import { RootStackParamList } from "../../App";
-import { Link, Text } from "../../components/Themed";
-import Heading from "../../components/Heading";
+import { Heading, Link, Text } from "../../components/Themed";
 import GoogleIcon from "../../components/Icons/GoogleIcon";
 import Spacer from "../../components/Spacer";
 import AuthLayout from "./AuthLayout";
