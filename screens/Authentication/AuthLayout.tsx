@@ -11,7 +11,7 @@ export default function AuthLayout({ children }: Props) {
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: "#000C26",
+    // backgroundColor: "#000C26",
     height: "100%",
     paddingHorizontal: 30,
   },

@@ -25,7 +25,7 @@ export function Heading({ children, style, ...rest }: HeadingProps) {
 export function Text(props: TextProps) {
   const { style, ...rest } = props;
 
-  return <DefaultText style={[{ color: "#e4e5e5" }, style]} {...rest} />;
+  return <DefaultText style={[style]} {...rest} />;
 }
 
 export function Link(props: TextProps) {

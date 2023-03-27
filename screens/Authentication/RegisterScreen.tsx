@@ -51,7 +51,7 @@ export default function RegisterScreen() {
         <AntDesign
           name="close"
           size={24}
-          color="white"
+          color="black"
           onPress={() => {
             navigation.goBack();
           }}
@@ -64,7 +64,7 @@ export default function RegisterScreen() {
     <AuthLayout>
       <Spacer height={32} />
 
-      <Heading style={{ color: "#e4e5e5" }}>Register</Heading>
+      <Heading>Register</Heading>
 
       <Spacer height={24} />
 
@@ -79,7 +79,6 @@ export default function RegisterScreen() {
         autoComplete="off"
         blurOnSubmit
         placeholder="Username"
-        placeholderTextColor="#FBF8FF"
         style={styles.input}
         value={username}
         onChangeText={handleUsernameChange}
@@ -91,7 +90,6 @@ export default function RegisterScreen() {
         autoComplete="email"
         blurOnSubmit
         placeholder="Email address"
-        placeholderTextColor="#FBF8FF"
         style={styles.input}
         value={email}
         onChangeText={handleEmailChange}
@@ -103,7 +101,6 @@ export default function RegisterScreen() {
         autoComplete="password"
         blurOnSubmit
         placeholder="Password"
-        placeholderTextColor="#FBF8FF"
         style={styles.input}
         secureTextEntry
         value={password}
@@ -116,7 +113,6 @@ export default function RegisterScreen() {
         autoComplete="password"
         blurOnSubmit
         placeholder="Confirm Password"
-        placeholderTextColor="#FBF8FF"
         style={styles.input}
         secureTextEntry
         value={confirmPassword}

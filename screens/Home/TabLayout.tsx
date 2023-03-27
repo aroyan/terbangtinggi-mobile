@@ -11,7 +11,7 @@ export default function TabLayout({ children }: Props) {
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: "#000C26",
+    // backgroundColor: "#000C26",
     paddingHorizontal: 30,
     minHeight: "100%",
   },

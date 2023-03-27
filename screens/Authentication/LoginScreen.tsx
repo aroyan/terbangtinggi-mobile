@@ -38,7 +38,7 @@ export default function LoginScreen() {
         <AntDesign
           name="close"
           size={24}
-          color="white"
+          color="black"
           onPress={() => {
             navigation.goBack();
           }}
@@ -51,7 +51,7 @@ export default function LoginScreen() {
     <AuthLayout>
       <Spacer height={32} />
 
-      <Heading style={{ color: "#e4e5e5" }}>Login</Heading>
+      <Heading>Login</Heading>
 
       <Spacer height={24} />
 
@@ -66,7 +66,6 @@ export default function LoginScreen() {
         autoComplete="email"
         blurOnSubmit
         placeholder="Email address"
-        placeholderTextColor="white"
         style={styles.input}
         value={email}
         onChangeText={handleEmailChange}
@@ -78,7 +77,6 @@ export default function LoginScreen() {
         autoComplete="password"
         blurOnSubmit
         placeholder="Password"
-        placeholderTextColor="white"
         style={styles.input}
         secureTextEntry
         value={password}
