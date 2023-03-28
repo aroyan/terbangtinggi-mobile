@@ -12,21 +12,21 @@ export default function HomeTabNavigator() {
     <Tab.Navigator
       screenOptions={{
         headerTitleAlign: "center",
-        headerTintColor: "white",
         headerTitleStyle: {
           fontWeight: "400",
         },
         headerStyle: {
-          backgroundColor: "#131D38",
+          // backgroundColor: "#131D38",
         },
-        tabBarStyle: { backgroundColor: "#131D38" },
-        tabBarActiveTintColor: "#98B1F4",
+        // tabBarStyle: { backgroundColor: "#131D38" },
+        // tabBarActiveTintColor: "#98B1F4",
       }}
     >
       <Tab.Screen
         name="Home"
         component={HomeScreen}
         options={{
+          tabBarHideOnKeyboard: true,
           headerTitle: "Terbang Tinggi",
           tabBarIcon: ({ color }) => (
             <AntDesign name="home" size={24} color={color} />
@@ -46,6 +46,7 @@ export default function HomeTabNavigator() {
         name="Profile"
         component={ProfileScreen}
         options={{
+          headerShown: false,
           tabBarIcon: ({ color }) => (
             <AntDesign name="user" size={24} color={color} />
           ),
