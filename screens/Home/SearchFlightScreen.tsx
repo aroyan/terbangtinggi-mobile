@@ -5,23 +5,46 @@ import {
   Text,
   TextInput,
   BackHandler,
+  ListRenderItem,
+  FlatList,
 } from "react-native";
 import {
   BottomSheetModal,
   BottomSheetModalProvider,
 } from "@gorhom/bottom-sheet";
 import { useEffect, useRef, useState } from "react";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 import Spacer from "../../components/Spacer";
+import { AIRPORTS_DATA, IAirport } from "../../constants/airports";
+import { ALL_AIRPORTS_INDONESIA_URL } from "../../config";
 
 export default function SearchFlightScreen({ navigation }: any) {
   const [isOpen, setIsOpen] = useState(false);
-  const bottomSheetModalRef = useRef(null);
+  const departureBottomSheetRef = useRef(null);
+  const arrivalBottomSheetRef = useRef(null);
+  const dateBottomSheetRef = useRef(null);
+
+  const [searchAirport, setSearchAirport] = useState<string>("");
+  const [departureAirport, setDepartureAirport] = useState<string>("");
+  const [indonesianAirports, setIndonesianAirpots] = useState<
+    IAirport[] | null
+  >(null);
 
   const snapPoints = ["100%"];
 
   function handlePresentModal() {
-    bottomSheetModalRef.current?.present();
+    departureBottomSheetRef.current?.present();
+    setIsOpen(true);
+  }
+
+  function handleShowArrivalModal() {
+    arrivalBottomSheetRef.current?.present();
+    setIsOpen(true);
+  }
+
+  function handleShowDateModal() {
+    dateBottomSheetRef.current?.present();
     setIsOpen(true);
   }
 
@@ -29,7 +52,7 @@ export default function SearchFlightScreen({ navigation }: any) {
   useEffect(() => {
     const backAction = () => {
       if (isOpen) {
-        bottomSheetModalRef.current?.close();
+        departureBottomSheetRef.current?.close();
         setIsOpen(false);
         return true;
       } else {
@@ -44,6 +67,88 @@ export default function SearchFlightScreen({ navigation }: any) {
 
     return () => backHandler.remove();
   }, [isOpen]);
+
+  useEffect(() => {
+    const saveDataToAsyncStorage = async (value: any) => {
+      try {
+        await AsyncStorage.setItem("INDONESIAN_AIRPORTS", value);
+      } catch (error) {
+        throw error;
+      }
+    };
+
+    const getAllIndonesiaAirports = async () => {
+      const data = await fetch(ALL_AIRPORTS_INDONESIA_URL);
+      const jsonData = await data.json();
+      saveDataToAsyncStorage(JSON.stringify(jsonData));
+    };
+
+    const getDataFromAsyncStorage = async () => {
+      try {
+        const jsonValue = await AsyncStorage.getItem("INDONESIAN_AIRPORTS");
+        if (jsonValue === null) {
+          getAllIndonesiaAirports();
+        }
+        setIndonesianAirpots(JSON.parse(jsonValue!));
+      } catch (error) {
+        throw error;
+      }
+    };
+
+    getDataFromAsyncStorage();
+  }, []);
+
+  // useEffect(() => {
+  //   async function removeItemValue(key: string) {
+  //     try {
+  //       await AsyncStorage.removeItem(key);
+  //       return true;
+  //     } catch (exception) {
+  //       return false;
+  //     }
+  //   }
+  //   removeItemValue("INDONESIAN_AIRPORTS");
+  // }, []);
+
+  const filteredAirports = indonesianAirports ?? AIRPORTS_DATA;
+
+  const DATA = filteredAirports.filter((airport) => {
+    const searchTerm = searchAirport.toLowerCase();
+    const { airportName, cityName, alias } = airport;
+    const lowerCaseAlias = alias?.map((alias) => alias.toLowerCase()) || [];
+
+    return (
+      airportName.toLowerCase().includes(searchTerm) ||
+      cityName.toLowerCase().includes(searchTerm) ||
+      lowerCaseAlias.includes(searchTerm)
+    );
+  });
+
+  const handleAirportChange = (text: string) => setSearchAirport(text);
+
+  const renderAirports: ListRenderItem<IAirport> = ({ item }) => {
+    return (
+      <View
+        style={{
+          padding: 16,
+          marginBottom: 8,
+          borderRadius: 4,
+          backgroundColor: "whitesmoke",
+        }}
+      >
+        <TouchableOpacity
+          onPress={() => {
+            setDepartureAirport(item.airportName);
+            departureBottomSheetRef.current?.close();
+          }}
+        >
+          <Text>
+            {item.airportName} - {item.airportCode}
+          </Text>
+        </TouchableOpacity>
+      </View>
+    );
+  };
 
   return (
     <View style={{ height: "100%" }}>
@@ -63,7 +168,9 @@ export default function SearchFlightScreen({ navigation }: any) {
               ]}
               onPress={handlePresentModal}
             >
-              <Text style={styles.inputButtonText}>Departure</Text>
+              <Text style={styles.inputButtonText}>
+                {departureAirport || "Departure"}
+              </Text>
             </TouchableOpacity>
             <View
               style={{
@@ -80,6 +187,7 @@ export default function SearchFlightScreen({ navigation }: any) {
                   borderTopRightRadius: 0,
                 },
               ]}
+              onPress={handleShowArrivalModal}
             >
               <Text style={styles.inputButtonText}>Arrival</Text>
             </TouchableOpacity>
@@ -107,25 +215,25 @@ export default function SearchFlightScreen({ navigation }: any) {
             </Text>
           </TouchableOpacity>
 
+          {/* Bottom sheet for Departure */}
           <BottomSheetModal
-            ref={bottomSheetModalRef}
+            ref={departureBottomSheetRef}
             index={0}
             snapPoints={snapPoints}
             enablePanDownToClose
           >
             <View style={styles.contentContainer}>
               <TouchableOpacity
-                onPress={() => bottomSheetModalRef.current?.close()}
+                onPress={() => departureBottomSheetRef.current?.close()}
                 style={{
                   position: "absolute",
                   borderRadius: 50,
                   padding: 8,
                   top: 8,
                   left: 8,
-                  backgroundColor: "gray",
                 }}
               >
-                <Text style={{ color: "white" }}>Close</Text>
+                <Text>Close</Text>
               </TouchableOpacity>
               <Text
                 style={[
@@ -139,21 +247,83 @@ export default function SearchFlightScreen({ navigation }: any) {
               >
                 Select an Airport
               </Text>
+
               <TextInput
-                placeholder="Enter airport name"
-                placeholderTextColor="black"
-                style={{
-                  alignSelf: "stretch",
-                  borderColor: "blue",
-                  borderWidth: 1,
-                  borderRadius: 50,
-                  padding: 8,
-                  paddingHorizontal: 16,
-                }}
+                value={searchAirport}
+                placeholder="Search Airport"
+                style={[
+                  styles.input,
+                  {
+                    alignSelf: "stretch",
+                    borderColor: "blue",
+                    borderWidth: 1,
+                    borderRadius: 50,
+                    padding: 8,
+                    paddingHorizontal: 16,
+                  },
+                ]}
+                onChangeText={handleAirportChange}
               />
               <Spacer height={16} />
-              <Text style={{ alignSelf: "flex-start" }}>Hello</Text>
-              {/* Render FlatList of Search Result here */}
+              {!searchAirport ? null : (
+                <FlatList data={DATA} renderItem={renderAirports} />
+              )}
+            </View>
+          </BottomSheetModal>
+
+          {/* Bottom sheet for arrival */}
+          <BottomSheetModal
+            ref={arrivalBottomSheetRef}
+            index={0}
+            snapPoints={snapPoints}
+            enablePanDownToClose
+          >
+            <View style={styles.contentContainer}>
+              <TouchableOpacity
+                onPress={() => arrivalBottomSheetRef.current?.close()}
+                style={{
+                  position: "absolute",
+                  borderRadius: 50,
+                  padding: 8,
+                  top: 8,
+                  left: 8,
+                }}
+              >
+                <Text>Close</Text>
+              </TouchableOpacity>
+              <Text
+                style={[
+                  styles.title,
+                  {
+                    marginVertical: 24,
+                    alignSelf: "flex-start",
+                    marginTop: 48,
+                  },
+                ]}
+              >
+                Select arrival airport
+              </Text>
+
+              <TextInput
+                value={searchAirport}
+                placeholder="Search Airport"
+                style={[
+                  styles.input,
+                  {
+                    alignSelf: "stretch",
+                    borderColor: "blue",
+                    borderWidth: 1,
+                    borderRadius: 50,
+                    padding: 8,
+                    paddingHorizontal: 16,
+                  },
+                ]}
+                onChangeText={handleAirportChange}
+              />
+              <Spacer height={16} />
+              {!searchAirport ? null : (
+                <FlatList data={DATA} renderItem={renderAirports} />
+              )}
             </View>
           </BottomSheetModal>
         </View>
@@ -204,5 +374,12 @@ const styles = StyleSheet.create({
   inputButtonText: {
     textAlign: "center",
     fontWeight: "bold",
+  },
+  input: {
+    height: 40,
+    borderColor: "#ccc",
+    borderWidth: 1,
+    paddingHorizontal: 10,
+    borderRadius: 8,
   },
 });
